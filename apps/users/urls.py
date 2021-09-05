@@ -1,13 +1,6 @@
-from rest_framework.routers import DefaultRouter
-from apps.users import views
 from django.urls import path
-
-app_name = 'users'
-
-router = DefaultRouter()
-router.register('user', views.UserAPIView, basename='users')
+from apps.users.views import activate
 
 urlpatterns = [
-    path('activate/<str:email>/', views.activate, name = 'activate'),
+    path(r'backend/activate/(?P<uid64>[0-9A-Za-z_-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', activate, name = 'activate'),
 ]
-urlpatterns += router.urls
