@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Post create
+{% endblock %}
+{% block style %}
+    <style>
+        .container{
+            margin: 0 auto;
+            width: 80%;
+        }
+        .container > form{
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            margin: 0 auto;
+        }
+        .container > form > *{
+            margin: 10px 0;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <form enctype="multipart/form-data"
+              action="{% url 'users:post_create' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create post</button>
+        </form>
+    </div>
+{% endblock %}

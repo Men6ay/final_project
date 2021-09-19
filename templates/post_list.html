@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Posts
+{% endblock %}
+{% block style %}
+    <style>
+        .container{
+            margin: auto;
+            width: 80%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .post{
+            margin: 10px 50px;
+            display: grid;
+        }
+        .post > *{
+            margin: 10px 0;
+        }
+        .post > a{
+            text-decoration: none;
+            color: #2aabd2;
+            font-size: 36px;
+        }
+        .post > a:hover{
+            color: #93c54b;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% for post, image in objects %}
+            <div class="post">
+                <a href="{% url 'users:post_detail' post.id %}">{{ post.title }}</a>
+                <img src="/media/{{ image.image }}" alt=""
+                     width="200px" height="150px">
+                <h6>{{ post.create_at }}</h6>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

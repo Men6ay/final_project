@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+    <style>
+        .header{
+            display: flex;
+            justify-content: space-around;
+            height: 100px;
+            align-items: center;
+            background-color: #93c54b;
+        }
+        .menu > ul{
+            display: flex;
+            justify-content: space-around;
+        }
+        .menu > ul > li{
+            list-style: none;
+            margin: 0 20px;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/547994bb66.js" crossorigin="anonymous"></script>
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+
+{% include 'header.html' %}
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
