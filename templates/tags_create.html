@@ -18,11 +18,11 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <form enctype="multipart/form-data"
-              action="{% url 'users:post_create' %}" method="post">
+        <form action="{% url 'users:tag_create'  %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Create post</button>
+{#            <input type="text" name="tag">#}
+            <button type="submit">Create tag</button>
         </form>
     </div>
 {% endblock %}

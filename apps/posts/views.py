@@ -11,7 +11,7 @@ from apps.posts.models import Post, Like, PostImage, PostVideo, Tag
 from apps.posts.serializers import PostVideoSerializer, PostSerializer, \
     PostDetailSerializer, LikeSerializer, PostImageSerializer, TagSerializer
 from apps.posts.permissions import OwnerPermission
-from apps.posts.forms import PostLikeForm, PostCreateForm
+from apps.posts.forms import PostLikeForm, PostCreateForm, TagCreateForm
 from apps.posts.services import PostServices
 
 
@@ -61,6 +61,43 @@ class PostDeleteView(generic.DeleteView):
         post = Post.objects.get(id=kwargs['pk'])
         if request.user == post.user:
             return super(PostDeleteView, self).dispatch(
+                request, *args, **kwargs
+            )
+        else:
+            return HttpResponse('You have no permissions')
+
+
+class TagListView(generic.ListView):
+    template_name = 'tags_list.html'
+    model = Tag
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TagListView, self).get_context_data()
+        context['tags'] = Tag.objects.all()
+        return context
+
+
+class TagCreateFormView(generic.FormView):
+    form_class = TagCreateForm
+    template_name = 'tags_create.html'
+    success_url = reverse_lazy('users:tag_list')
+
+    def form_valid(self, form):
+        form.save(commit=True)
+        return super(TagCreateFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(TagCreateFormView, self).form_invalid(form)
+
+
+class TagDeleteView(generic.DeleteView):
+    model = Tag
+    success_url = reverse_lazy('users:tag_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super(TagDeleteView, self).dispatch(
                 request, *args, **kwargs
             )
         else:

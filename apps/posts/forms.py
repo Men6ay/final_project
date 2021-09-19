@@ -17,3 +17,9 @@ class PostCreateForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={'multiple': True})
     )
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all())
+
+
+class TagCreateForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ('name', )
