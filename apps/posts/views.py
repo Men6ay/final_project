@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -47,6 +50,21 @@ class PostCreateFormView(generic.FormView):
 
     def form_invalid(self, form):
         return super(PostCreateFormView, self).form_invalid(form)
+
+
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    success_url = reverse_lazy('users:post_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        post = Post.objects.get(id=kwargs['pk'])
+        if request.user == post.user:
+            return super(PostDeleteView, self).dispatch(
+                request, *args, **kwargs
+            )
+        else:
+            return HttpResponse('You have no permissions')
 
 
 class PostLikeFormView(generic.FormView):

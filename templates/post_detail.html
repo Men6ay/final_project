@@ -56,6 +56,10 @@
                     <i>{{ post.like_post.all.count }} people like this </i>
                 </div>
             </div>
+            <form method="post" action="{% url 'users:post_delete' post.id %}">
+                {% csrf_token %}
+                <input type="submit" value="Delete post">
+            </form>
         </div>
     </div>
 {% endblock %}
