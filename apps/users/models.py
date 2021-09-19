@@ -1,8 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser,BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from datetime import *
 import jwt
 from django.conf import settings
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -33,6 +34,7 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractUser):
     GENDER_CHOICES = (
         ('m', 'Men'),
@@ -40,14 +42,14 @@ class User(AbstractUser):
     )
     username = models.CharField(
         max_length=255, unique=True
-        )
+    )
     gender = models.CharField(
         choices=GENDER_CHOICES, max_length=255
-        )
+    )
     age = models.PositiveIntegerField(
         default=0
-        )
-    email= models.EmailField(
+    )
+    email = models.EmailField(
     )
 
     is_active = models.BooleanField(default=False)
@@ -68,4 +70,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} -- {self.gender}"
-    
