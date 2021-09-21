@@ -15,10 +15,23 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <form class="user" method="post" action="{% url 'users:user_change' %}">
+        <form class="user" method="post" action="{% url 'users:user_change' user.id %}">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Submit</button>
+            <input type="submit" value="Update">
+{#            <label for="username">Username</label>#}
+{#            <input id="username" type="text" name="username" value="{{ user.username }}">#}
+{#            <label for="email">Email</label>#}
+{#            <input id="email" type="text" name="email" value="{{ user.email }}">#}
+{#            <label for="gender">Gender</label>#}
+{#            <select id="gender" name="gender">#}
+{#                <option value="{{ user.gender }}">------</option>#}
+{#                <option value="m">Male</option>#}
+{#                <option value="f">Female</option>#}
+{#            </select>#}
+{#            <label for="age">Age</label>#}
+{#            <input id="age" type="number" name="age" value="{{ user.age }}">#}
+{#            <button type="submit">Submit</button>#}
         </form>
     </div>
 {% endblock %}

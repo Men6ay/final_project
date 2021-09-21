@@ -20,7 +20,7 @@
             <h1>Email: {{ user.email }}</h1>
             <h2>Age: {{ user.age }}</h2>
             <h2>Gender: {{ user.gender }}</h2>
-            <a href="{% url 'users:user_change' %}">Edit profile</a>
+            <a href="{% url 'users:user_change' user.id %}">Edit profile</a>
         </div>
     </div>
 {% endblock %}

@@ -15,4 +15,6 @@ urlpatterns = [
     path('tag-create/', views.TagCreateFormView.as_view(), name='tag_create'),
     path('tag-delete/<int:pk>', views.TagDeleteView.as_view(),
          name='tag_delete'),
+    path('comment-delete/<int:pk>', views.CommentDeleteView.as_view(),
+         name='comment_delete'),
 ]

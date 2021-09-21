@@ -1,9 +1,7 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
@@ -11,7 +9,8 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.utils.encoding import force_text
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView
+from django.views.generic.edit import UpdateView
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -93,17 +92,17 @@ class UserProfileTemplateView(TemplateView):
         return context
 
 
-class UserChangeView(FormView):
-    form_class = UserChangeForm
+class UserChangeView(UpdateView):
+    model = get_user_model()
+    fields = ('username', 'email', 'age', 'gender', )
     template_name = 'user_change.html'
+    template_name_suffix = '_update_form'
     success_url = reverse_lazy('users:user_profile')
 
-    def form_valid(self, form):
-        form.save()
-        return super(UserChangeView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(UserChangeView, self).form_invalid(form)
+    def get_context_data(self, **kwargs):
+        context = super(UserChangeView, self).get_context_data()
+        context['user'] = self.request.user
+        return context
 
 
 class UserAPIView(viewsets.ModelViewSet):
@@ -137,6 +136,7 @@ class UserAPIView(viewsets.ModelViewSet):
             data = serializer.errors
         return Response(data)
 
+
 def activate(request, uid64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uid64))
@@ -151,8 +151,3 @@ def activate(request, uid64, token):
         return HttpResponse('Account activated successfully')
     else:
         return HttpResponse('The link is inactive')
-    
-
-def user_logout(request):
-    logout(request)
-    return HttpResponse('You are logged out now')
