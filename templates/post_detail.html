@@ -55,6 +55,26 @@
                     <input type="submit" value="Delete post">
                 </form>
             {% endif %}
+            <div class="comments">
+                <form action="{% url 'posts:post_detail' post.id %}"
+                      method="post">{% csrf_token %}
+                    <label for="text">Comment</label>
+                    <input type="text" name="text" id="text">
+                    <input type="hidden" name="post" value="{{ post.id }}">
+                    <button type="submit">Create comment</button>
+                </form>
+                <div class="comments-list">
+                    {% for comment in comments %}
+                        <div class="comment">
+                            {{ comment.text }}
+                            <form action="{% url 'posts:comment_delete' comment.id %}"
+                                  method="post">{% csrf_token %}
+                                <button type="submit">Delete comment</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

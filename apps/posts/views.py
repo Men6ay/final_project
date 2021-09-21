@@ -5,8 +5,10 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 
+from apps.comments.models import Comment
 from apps.posts.models import Post, Tag
-from apps.posts.forms import PostLikeForm, PostCreateForm, TagCreateForm
+from apps.posts.forms import PostLikeForm, PostCreateForm, TagCreateForm, \
+    CommentCreationForm
 from apps.posts.services import PostServices
 
 
@@ -20,13 +22,31 @@ class PostListView(generic.ListView):
         return PostServices.post_list(context)
 
 
-class PostDetail(generic.DetailView):
+class PostDetail(generic.DetailView, generic.FormView):
     model = Post
+    form_class = CommentCreationForm
     template_name = 'post_detail.html'
+    success_url = reverse_lazy('posts:post_list')
 
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data()
+        post = kwargs.get('object')
+        context['comments'] = Comment.objects.filter(post_id=post.id)
         return PostServices.post_detail(context, kwargs)
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            Comment.objects.create(
+                user_id=self.request.user.id,
+                post_id=form.cleaned_data.get('post'),
+                text=form.cleaned_data.get('text')
+            )
+        else:
+            return super(PostDetail, self).form_invalid(form)
+        return super(PostDetail, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(PostDetail, self).form_invalid(form)
 
 
 class PostCreateFormView(generic.FormView):
@@ -56,6 +76,21 @@ class PostDeleteView(generic.DeleteView):
         post = Post.objects.get(id=kwargs['pk'])
         if request.user == post.user:
             return super(PostDeleteView, self).dispatch(
+                request, *args, **kwargs
+            )
+        else:
+            return HttpResponse('You have no permissions')
+
+
+class CommentDeleteView(generic.DeleteView):
+    model = Comment
+    success_url = reverse_lazy('posts:post_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        comment = Comment.objects.get(id=kwargs['pk'])
+        if request.user == comment.user:
+            return super(CommentDeleteView, self).dispatch(
                 request, *args, **kwargs
             )
         else:

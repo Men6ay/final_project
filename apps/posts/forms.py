@@ -23,3 +23,8 @@ class TagCreateForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name', )
+
+
+class CommentCreationForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea())
+    post = forms.IntegerField()
