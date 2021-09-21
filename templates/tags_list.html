@@ -19,9 +19,9 @@
         <div class="tags">
             {% for tag in tags %}
                 <div class="tag">
-                    <h1>{{ tag }}</h1>
+                    <h1>{{ tag.name }}</h1>
                     {% if user.is_authenticated %}
-                        <form action="{% url 'users:tag_delete' tag.id %}"
+                        <form action="{% url 'posts:tag_delete' tag.id %}"
                               method="post">
                             {% csrf_token %}
                             <input type="submit" value="Delete tag">

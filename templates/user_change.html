@@ -1,28 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-    Post create
+    Change user
 {% endblock %}
 {% block style %}
     <style>
-        .container > form{
+        .user{
             display: flex;
             flex-direction: column;
-            width: 20%;
-            margin: 0 auto;
-        }
-        .container > form > *{
-            margin: 10px 0;
+            align-items: center;
+            text-align: center;
         }
     </style>
 {% endblock %}
 {% block content %}
     <div class="container">
-        <form action="{% url 'posts:tag_create'  %}" method="post">
+        <form class="user" method="post" action="{% url 'users:user_change' %}">
             {% csrf_token %}
             {{ form.as_p }}
-{#            <input type="text" name="tag">#}
-            <button type="submit">Create tag</button>
+            <button type="submit">Submit</button>
         </form>
     </div>
 {% endblock %}

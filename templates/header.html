@@ -8,12 +8,13 @@
                 <li><a href="{% url 'users:user_create' %}">Register</a></li>
                 <li><a href="{% url 'users:user_login' %}">Login</a></li>
             {% else %}
-                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li><a href="{% url 'users:user_profile' %}">Profile</a></li>
+                <li><a href="{% url 'users:user_logout' %}">Logout</a></li>
             {% endif %}
-            <li><a href="{% url 'users:post_list' %}">Posts</a></li>
-            <li><a href="{% url 'users:post_create' %}">Create post</a></li>
-            <li><a href="{% url 'users:tag_list' %}">Tags</a></li>
-            <li><a href="{% url 'users:tag_create' %}">Create tag</a></li>
+            <li><a href="{% url 'posts:post_list' %}">Posts</a></li>
+            <li><a href="{% url 'posts:post_create' %}">Create post</a></li>
+            <li><a href="{% url 'posts:tag_list' %}">Tags</a></li>
+            <li><a href="{% url 'posts:tag_create' %}">Create tag</a></li>
         </ul>
     </div>
 </div>

@@ -43,6 +43,9 @@ class Like(models.Model):
         related_name='like_post',
     )
 
+    class Meta:
+        unique_together = ('user', 'post')
+
     def __str__(self):
         return f"{self.id}"
 

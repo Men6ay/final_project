@@ -1,3 +1,5 @@
+from django.db import IntegrityError
+
 from apps.posts.models import Post, PostImage, PostVideo, Like
 
 
@@ -51,4 +53,7 @@ class PostServices:
     @staticmethod
     def like_create(request, form):
         post_id = form.cleaned_data['post_id']
-        Like.objects.create(user_id=request.user.id, post_id=post_id)
+        try:
+            Like.objects.create(user_id=request.user.id, post_id=post_id)
+        except IntegrityError:
+            Like.objects.get(user_id=request.user.id, post_id=post_id).delete()

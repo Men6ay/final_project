@@ -1,19 +1,22 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.utils.encoding import force_text
 from django.http import HttpResponse
 from django.views import View
+from django.views.generic import TemplateView, FormView
 
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from apps.users.forms import UserCreationForm, UserLoginForm
+from apps.users.forms import UserCreationForm, UserLoginForm, UserChangeForm
 from apps.users.serializers import UserSerializer
 from apps.users.models import User
 from apps.users.tokens import account_activation_token
@@ -75,42 +78,64 @@ class UserLoginView(View):
             user = authenticate(request, username=username, password=password)
             if user.is_authenticated:
                 login(request, user)
-                return redirect(reverse_lazy('users:post_list'))
+                return redirect(reverse_lazy('posts:post_list'))
             else:
                 return redirect(reverse_lazy('users:user_login'))
         return render(request, 'user_login.html')
 
 
-# class UserAPIView(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
-#         data = {}
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             mail_subject = 'Email verification'
-#             message = render_to_string('acc_active_email.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             to_email = serializer.data.get('email')
-#             email = EmailMessage(
-#                 mail_subject, message, to=[to_email]
-#             )
-#             email.send()
-#             data['response'] = "Successfully created a new user. Please check your email and verify your account."
-#             data['email'] = user.email
-#             data['token'] = user.token
-#         else:
-#             data = serializer.errors
-#         return Response(data)
+class UserProfileTemplateView(TemplateView):
+    template_name = 'user_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileTemplateView, self).get_context_data()
+        context['user'] = self.request.user
+        return context
+
+
+class UserChangeView(FormView):
+    form_class = UserChangeForm
+    template_name = 'user_change.html'
+    success_url = reverse_lazy('users:user_profile')
+
+    def form_valid(self, form):
+        form.save()
+        return super(UserChangeView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UserChangeView, self).form_invalid(form)
+
+
+class UserAPIView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            user = serializer.save()
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Email verification'
+            message = render_to_string('acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = serializer.data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            data['response'] = "Successfully created a new user. Please check your email and verify your account."
+            data['email'] = user.email
+            data['token'] = user.token
+        else:
+            data = serializer.errors
+        return Response(data)
 
 def activate(request, uid64, token):
     try:

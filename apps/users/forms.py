@@ -52,7 +52,7 @@ class UserLoginForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
-            match = User.objects.get(username=username)
+            User.objects.get(username=username)
             return username
         except User.DoesNotExist:
             pass
@@ -61,7 +61,13 @@ class UserLoginForm(forms.Form):
     def clean_password(self):
         password = self.cleaned_data["password"]
         try:
-            match = User.objects.get(password=password)
+            User.objects.get(password=password)
         except User.DoesNotExist:
             return password
         raise forms.ValidationError('Username or password does not exist.')
+
+
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'gender', 'age', )

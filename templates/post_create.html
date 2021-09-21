@@ -19,7 +19,7 @@
 {% block content %}
     <div class="container">
         <form enctype="multipart/form-data"
-              action="{% url 'users:post_create' %}" method="post">
+              action="{% url 'posts:post_create' %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Create post</button>

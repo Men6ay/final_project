@@ -27,7 +27,7 @@
     <div class="container">
         {% for post, image in objects %}
             <div class="post">
-                <a href="{% url 'users:post_detail' post.id %}">{{ post.title }}</a>
+                <a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a>
                 <img src="/media/{{ image.image }}" alt=""
                      width="200px" height="150px">
                 <h6>{{ post.create_at }}</h6>

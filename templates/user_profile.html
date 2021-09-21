@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block style %}
+    <style>
+        .user{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="user">
+            <h1>Username: {{ user.username }}</h1>
+            <h1>Email: {{ user.email }}</h1>
+            <h2>Age: {{ user.age }}</h2>
+            <h2>Gender: {{ user.gender }}</h2>
+            <a href="{% url 'users:user_change' %}">Edit profile</a>
+        </div>
+    </div>
+{% endblock %}
