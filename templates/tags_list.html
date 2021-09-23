@@ -34,6 +34,9 @@
                         {% csrf_token %}
                         <input type="submit" value="Delete tag">
                     </form>
+                    <a href="{% url 'posts:tag_update' tag.id %}">
+                        <input type="submit" value="Update tag">
+                    </a>
                 {% endif %}
             </div>
         {% endfor %}

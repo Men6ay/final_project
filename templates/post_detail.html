@@ -93,6 +93,9 @@
                         {% csrf_token %}
                         <input type="submit" value="Delete post">
                     </form>
+                    <a href="{% url 'posts:post_update' post.id %}">
+                        <input type="submit" value="Update post">
+                    </a>
                 {% endif %}
             </div>
             <div class="comments">
@@ -110,6 +113,10 @@
                                 {{ comment.user.username }}
                             </span><br>
                             <span>{{ comment.text }}</span>
+                            <a style="display: block"
+                               href="{% url 'posts:comment_update' comment.id %}">
+                                <input type="submit" value="Update comment">
+                            </a>
                             <form action="{% url 'posts:comment_delete' comment.id %}"
                                   method="post">{% csrf_token %}
                                 <button type="submit">Delete comment</button>
