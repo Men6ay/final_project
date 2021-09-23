@@ -5,11 +5,57 @@
 {% endblock %}
 {% block style %}
     <style>
+        .container{
+            display: flex;
+            align-items: center;
+            align-content: center;
+            text-align: center;
+        }
         .user{
             display: flex;
             flex-direction: column;
-            align-items: center;
+            padding: 10px;
+            margin-top: 50px;
             text-align: center;
+            align-content: center;
+            align-items: center;
+            background-color: #5e5e5e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px #2C2C2C;
+            color: white;
+            width: 25%;
+        }
+        .btn > a{
+            color: black;
+        }
+        .posts{
+            display: flex;
+            flex-wrap: wrap;
+            width: 70%;
+        }
+        .post{
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #5e5e5e;
+            text-align: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px #2C2C2C;
+            margin: 20px 50px 10px;
+        }
+        .post > *{
+            margin: 10px 0;
+            color: white;
+        }
+        .post > a{
+            text-decoration: none;
+            font-size: 36px;
+        }
+        .post > a:hover{
+            color: #93c54b;
+            text-decoration: none;
         }
     </style>
 {% endblock %}
@@ -20,7 +66,21 @@
             <h1>Email: {{ user.email }}</h1>
             <h2>Age: {{ user.age }}</h2>
             <h2>Gender: {{ user.gender }}</h2>
-            <a href="{% url 'users:user_change' user.id %}">Edit profile</a>
+            <button class="btn">
+                <a href="{% url 'users:user_change' user.id %}">
+                    Edit profile
+                </a>
+            </button>
+        </div>
+        <div class="posts">
+            {% for post, image in objects %}
+                <div class="post">
+                    <a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a>
+                    <img src="/media/{{ image.image }}" alt=""
+                         width="200px" height="150px">
+                    <h6>{{ post.create_at }}</h6>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

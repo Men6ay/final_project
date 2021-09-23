@@ -5,11 +5,29 @@
 {% endblock %}
 {% block style %}
     <style>
-        .user{
+        .container > form{
+            width: 50%;
             display: flex;
             flex-direction: column;
+            padding: 10px;
+            margin-top: 50px;
+            text-align: center;
+            align-content: center;
+            align-items: center;
+            background-color: #5e5e5e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px #2C2C2C;
+            color: white;
+        }
+        form > *{
+            display: flex;
+            flex-direction: column;
+            align-content: center;
             align-items: center;
             text-align: center;
+        }
+        p{
+            margin: 10px 0;
         }
     </style>
 {% endblock %}
@@ -19,19 +37,6 @@
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Update">
-{#            <label for="username">Username</label>#}
-{#            <input id="username" type="text" name="username" value="{{ user.username }}">#}
-{#            <label for="email">Email</label>#}
-{#            <input id="email" type="text" name="email" value="{{ user.email }}">#}
-{#            <label for="gender">Gender</label>#}
-{#            <select id="gender" name="gender">#}
-{#                <option value="{{ user.gender }}">------</option>#}
-{#                <option value="m">Male</option>#}
-{#                <option value="f">Female</option>#}
-{#            </select>#}
-{#            <label for="age">Age</label>#}
-{#            <input id="age" type="number" name="age" value="{{ user.age }}">#}
-{#            <button type="submit">Submit</button>#}
         </form>
     </div>
 {% endblock %}

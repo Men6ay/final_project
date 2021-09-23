@@ -5,30 +5,37 @@
 {% endblock %}
 {% block style %}
     <style>
-        .tags{
-            display: flex;
-            flex-wrap: wrap;
-        }
         .tag{
-            margin: 0 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #5e5e5e;
+            text-align: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px #2C2C2C;
+            margin: 20px 50px 10px;
+            color: white;
+            padding: 5px;
+        }
+        .tag > *{
+            margin: 5px 0;
         }
     </style>
 {% endblock %}
 {% block content %}
     <div class="container">
-        <div class="tags">
-            {% for tag in tags %}
-                <div class="tag">
-                    <h1>{{ tag.name }}</h1>
-                    {% if user.is_authenticated %}
-                        <form action="{% url 'posts:tag_delete' tag.id %}"
-                              method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Delete tag">
-                        </form>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
+        {% for tag in tags %}
+            <div class="tag">
+                <h1>{{ tag.name }}</h1>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'posts:tag_delete' tag.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete tag">
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

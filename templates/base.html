@@ -1,9 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Title{% endblock %}</title>
     <style>
+        body{
+            padding: 0;
+            margin: 0;
+            background-color: #dfdfdf;
+        }
         .container{
             margin: auto;
             width: 80%;
@@ -16,7 +22,10 @@
             justify-content: space-around;
             height: 100px;
             align-items: center;
-            background-color: #93c54b;
+            background-color: #5e5e5e;
+            padding: 0;
+            margin: 0;
+            box-shadow: 0 0 10px 4px #2C2C2C;
         }
         .menu > ul{
             display: flex;
@@ -28,6 +37,14 @@
         }
         a{
             text-decoration: none;
+            color: white;
+        }
+        a:hover{
+            color: #2aabd2;
+        }
+        .logo > img{
+            width: 50px;
+            height: 50px;
         }
     </style>
     <script src="https://kit.fontawesome.com/547994bb66.js" crossorigin="anonymous"></script>

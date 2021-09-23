@@ -6,15 +6,23 @@
 {% block style %}
     <style>
         .post{
-            margin: 10px 50px;
-            display: grid;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #5e5e5e;
+            text-align: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px #2C2C2C;
+            margin: 20px 50px 10px;
         }
         .post > *{
             margin: 10px 0;
+            color: white;
         }
         .post > a{
             text-decoration: none;
-            color: #2aabd2;
             font-size: 36px;
         }
         .post > a:hover{

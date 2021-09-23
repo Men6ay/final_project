@@ -15,6 +15,7 @@ from django.views.generic.edit import UpdateView
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+from apps.posts.models import PostImage, Post
 from apps.users.forms import UserCreationForm, UserLoginForm, UserChangeForm
 from apps.users.serializers import UserSerializer
 from apps.users.models import User
@@ -88,7 +89,14 @@ class UserProfileTemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileTemplateView, self).get_context_data()
+        images = PostImage.objects.all()
+        posts = Post.objects.filter(
+            post_images__in=images, user_id=self.request.user.id
+        ).distinct()
+        images = PostImage.objects.filter(post__in=posts)
+        objects = zip(posts, images)
         context['user'] = self.request.user
+        context['objects'] = objects
         return context
 
 
