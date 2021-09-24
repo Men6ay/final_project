@@ -36,6 +36,9 @@ urlpatterns = [
     path('api/', include(api_urlpatterns)),
     path('', include('apps.posts.urls')),
     path('users/', include('apps.users.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('users/', include('django.contrib.auth.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

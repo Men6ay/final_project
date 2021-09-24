@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <div class="header">
     <div class="logo">
         <img src="{% static 'roda.jpeg' %}" alt="logo">
@@ -8,6 +9,12 @@
             {% if user.is_anonymous %}
                 <li><a href="{% url 'users:user_create' %}">Register</a></li>
                 <li><a href="{% url 'users:user_login' %}">Login</a></li>
+                <li>
+                    <a class="btn btn-success"
+                      href="{% provider_login_url 'google' %}">
+                        Login with Google
+                    </a>
+                </li>
             {% else %}
                 <li><a href="{% url 'users:user_profile' %}">Profile</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
