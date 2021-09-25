@@ -63,7 +63,6 @@ class UserAuthView(View):
 class UserLoginView(View):
     @staticmethod
     def get(request, *args, **kwargs):
-        print('Hi')
         context = {
             'form': UserLoginForm()
         }
@@ -155,7 +154,7 @@ def activate(request, uid64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return HttpResponse('Account activated successfully')
     else:
         return HttpResponse('The link is inactive')
